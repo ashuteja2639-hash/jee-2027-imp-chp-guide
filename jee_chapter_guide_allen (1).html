@@ -1,0 +1,667 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>JEE Chapter Map — Allen Order</title><style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #22222e;
+    --border-bright: #2e2e3f;
+
+    --phy: #3b82f6;
+    --phy-dim: #1e3a5f;
+    --phy-glow: rgba(59,130,246,0.15);
+
+    --chem: #10b981;
+    --chem-dim: #0d3d2e;
+    --chem-glow: rgba(16,185,129,0.15);
+
+    --math: #f59e0b;
+    --math-dim: #4a2e00;
+    --math-glow: rgba(245,158,11,0.15);
+
+    --organic: #a855f7;
+    --organic-dim: #2e1b4a;
+
+    --inorganic: #06b6d4;
+    --inorganic-dim: #0c2e38;
+
+    --physical: #10b981;
+    --physical-dim: #0d3d2e;
+
+    --green: #22c55e;
+    --yellow: #eab308;
+    --red: #ef4444;
+    --muted: #6b7280;
+    --text: #e2e8f0;
+    --text-dim: #94a3b8;
+
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 60px 40px 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 700px; height: 300px;
+    background: radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 60px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  header h1 span { color: var(--phy); }
+  header p {
+    margin-top: 14px;
+    color: var(--text-dim);
+    font-size: 15px;
+    max-width: 620px;
+    line-height: 1.7;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-dim);
+  }
+  .dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    font-family: 'DM Mono', monospace;
+    white-space: nowrap;
+  }
+  .badge-green { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
+  .badge-yellow { background: rgba(234,179,8,0.12); color: var(--yellow); border: 1px solid rgba(234,179,8,0.25); }
+  .badge-red { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.25); }
+  .badge-purple { background: rgba(168,85,247,0.12); color: var(--organic); border: 1px solid rgba(168,85,247,0.25); }
+  .badge-cyan { background: rgba(6,182,212,0.12); color: var(--inorganic); border: 1px solid rgba(6,182,212,0.25); }
+  .badge-teal { background: rgba(16,185,129,0.12); color: var(--chem); border: 1px solid rgba(16,185,129,0.25); }
+
+  /* ── TABS ── */
+  .tabs-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 40px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .tabs-wrap::-webkit-scrollbar { display: none; }
+  .tab {
+    padding: 16px 24px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active-phy { color: var(--phy); border-bottom-color: var(--phy); }
+  .tab.active-chem { color: var(--chem); border-bottom-color: var(--chem); }
+  .tab.active-math { color: var(--math); border-bottom-color: var(--math); }
+
+  /* ── PROGRESS TRACKER ── */
+  .progress-wrap {
+    padding: 20px 40px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+  .progress-item {
+    flex: 1 1 200px;
+    min-width: 160px;
+  }
+  .progress-item.total {
+    flex: 1 1 260px;
+    border-left: 1px solid var(--border);
+    padding-left: 18px;
+  }
+  .progress-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+  }
+  .progress-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+  .progress-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .progress-track {
+    width: 100%;
+    height: 6px;
+    border-radius: 4px;
+    background: var(--border);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 4px;
+    transition: width 0.35s ease;
+  }
+  #bar-physics { background: var(--phy); }
+  #bar-chemistry { background: var(--chem); }
+  #bar-maths { background: var(--math); }
+  #bar-total { background: linear-gradient(90deg, var(--phy), var(--chem), var(--math)); }
+  .progress-name.name-physics { color: var(--phy); }
+  .progress-name.name-chemistry { color: var(--chem); }
+  .progress-name.name-maths { color: var(--math); }
+
+  /* ── CHAPTER CHECKBOX ── */
+  .chp-check {
+    width: 17px;
+    height: 17px;
+    margin-right: 10px;
+    flex-shrink: 0;
+    accent-color: var(--phy);
+    cursor: pointer;
+  }
+  .chapter-card.chp-done {
+    opacity: 0.55;
+  }
+  .chapter-card.chp-done .chapter-name {
+    text-decoration: line-through;
+    text-decoration-color: var(--muted);
+  }
+
+  /* ── MAIN LAYOUT ── */
+  main { padding: 0 40px 80px; }
+
+  .section { display: none; padding-top: 40px; }
+  .section.visible { display: block; }
+
+  .std-block { margin-bottom: 56px; }
+  .std-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .std-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    padding: 5px 12px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .tag-11 { background: rgba(245,158,11,0.1); color: var(--math); border: 1px solid rgba(245,158,11,0.2); }
+  .tag-12 { background: rgba(59,130,246,0.1); color: var(--phy); border: 1px solid rgba(59,130,246,0.2); }
+
+  .std-title {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  /* ── SUBJECT GROUPS ── */
+  .sub-group { margin-bottom: 32px; }
+  .sub-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    padding-left: 2px;
+  }
+
+  /* ── CHAPTER GRID ── */
+  .chapter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px;
+  }
+
+  .chapter-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+  .chapter-card:hover { border-color: var(--border-bright); background: #1a1a24; }
+
+  .chapter-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .chapter-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .chapter-name {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .prereq-block {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .prereq-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .prereq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .prereq-item {
+    font-size: 12px;
+    color: var(--text-dim);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .prereq-item::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--border-bright);
+    flex-shrink: 0;
+  }
+
+  /* ── ACCENTLINES ── */
+  .card-phy { border-left: 3px solid var(--phy); }
+  .card-chem-organic { border-left: 3px solid var(--organic); }
+  .card-chem-inorganic { border-left: 3px solid var(--inorganic); }
+  .card-chem-physical { border-left: 3px solid var(--physical); }
+  .card-math { border-left: 3px solid var(--math); }
+
+  /* ── MUST-DO PANEL ── */
+  .must-do-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+  }
+  .must-do-section h2 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .must-do-section p {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+  .must-do-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+  }
+  .must-do-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .must-do-item .icon { font-size: 16px; }
+
+  /* ── INDEPENDENT BANNER ── */
+  .independent-panel {
+    background: rgba(34,197,94,0.05);
+    border: 1px solid rgba(34,197,94,0.2);
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 32px;
+  }
+  .independent-panel h3 {
+    font-size: 14px;
+    color: var(--green);
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .independent-panel p {
+    font-size: 12px;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+  .ind-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .ind-chip {
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.2);
+    color: var(--green);
+    font-size: 12px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  /* STATUS ICONS */
+  .icon-independent::after { content: '✦'; color: var(--green); font-size: 10px; }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+
+  @media (max-width: 700px) {
+    header { padding: 36px 18px 24px; }
+    header p { font-size: 13px; }
+    .legend { padding: 12px 18px; gap: 8px; }
+    .legend-item { font-size: 11px; }
+
+    /* ── TABS: full-width, thumb-friendly on mobile ── */
+    .tabs-wrap {
+      padding: 0 8px;
+      gap: 4px;
+      overflow-x: visible;
+    }
+    .tab {
+      flex: 1 1 0;
+      padding: 14px 8px;
+      min-height: 48px; /* comfortable tap target */
+      font-size: 12px;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      -webkit-tap-highlight-color: rgba(255,255,255,0.08);
+      touch-action: manipulation;
+    }
+
+    main { padding: 0 14px 60px; }
+    .section { padding-top: 24px; }
+    .must-do-section { padding: 16px; }
+    .must-do-section h2 { font-size: 14px; }
+    .must-do-section p { font-size: 12px; }
+    .must-do-grid { grid-template-columns: 1fr; gap: 8px; }
+    .must-do-item { font-size: 12px; padding: 10px 12px; }
+    .std-title { font-size: 16px; }
+    .chapter-grid { grid-template-columns: 1fr; gap: 10px; }
+    .chapter-card { padding: 14px 14px; }
+    .chapter-name { font-size: 13px; }
+    .badge { font-size: 10px; padding: 2px 7px; }
+    .independent-panel { padding: 18px; }
+    .independent-panel h3 { font-size: 13px; }
+    .independent-panel p { font-size: 12px; }
+    .ind-chip { font-size: 11px; padding: 4px 10px; }
+    .prereq-item { font-size: 11px; }
+    .prereq-label { font-size: 9px; }
+    .std-header { flex-wrap: wrap; gap: 8px; }
+  }
+
+  /* ── EXTRA SMALL PHONES ── */
+  @media (max-width: 400px) {
+    header { padding: 28px 14px 20px; }
+    header h1 { font-size: 28px; }
+    header p { font-size: 12px; line-height: 1.6; }
+    .legend { padding: 10px 14px; gap: 6px; }
+    .legend-item { font-size: 10px; }
+    .tabs-wrap { padding: 0 6px; }
+    .tab { font-size: 11px; padding: 12px 4px; }
+    main { padding: 0 10px 50px; }
+    .chapter-card { padding: 12px; }
+    .chapter-name { font-size: 12.5px; }
+    .must-do-section { padding: 12px; }
+  }
+</style></head><body><header>
+  <div class="header-eyebrow">JEE Advanced 2027 · Allen Chapter Order</div>
+  <h1>The Complete<br><span>Chapter Map</span></h1>
+  <p>All 82 chapters from your Allen course — Physics (30), Chemistry (24), Mathematics (28) — with dependency markers, prerequisites and a tick-off tracker.</p>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><span class="badge badge-green">✦ Independent</span> Can start without any Class 11 prerequisite</div>
+  <div class="legend-item"><span class="badge badge-yellow">⚑ Partial Dep.</span> Needs 1–2 specific Class 11 topics only</div>
+  <div class="legend-item"><span class="badge badge-red">● Heavy Dep.</span> Needs strong Class 11 foundation</div>
+  <div class="legend-item"><span class="badge badge-purple">Organic</span></div>
+  <div class="legend-item"><span class="badge badge-cyan">Inorganic</span></div>
+  <div class="legend-item"><span class="badge badge-teal">Physical</span></div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-item">
+    <div class="progress-top"><span class="progress-name name-physics">Physics</span><span class="progress-count" id="label-physics">0 / 0</span></div>
+    <div class="progress-track"><div class="progress-fill" id="bar-physics"></div></div>
+  </div>
+  <div class="progress-item">
+    <div class="progress-top"><span class="progress-name name-chemistry">Chemistry</span><span class="progress-count" id="label-chemistry">0 / 0</span></div>
+    <div class="progress-track"><div class="progress-fill" id="bar-chemistry"></div></div>
+  </div>
+  <div class="progress-item">
+    <div class="progress-top"><span class="progress-name name-maths">Mathematics</span><span class="progress-count" id="label-maths">0 / 0</span></div>
+    <div class="progress-track"><div class="progress-fill" id="bar-maths"></div></div>
+  </div>
+  <div class="progress-item total">
+    <div class="progress-top"><span class="progress-name">Total Solved</span><span class="progress-count" id="label-total">0 / 0</span></div>
+    <div class="progress-track"><div class="progress-fill" id="bar-total"></div></div>
+  </div>
+</div>
+
+<div class="tabs-wrap">
+  <button class="tab active-phy" onclick="showTab('physics', this)">⚡ Physics</button>
+  <button class="tab" onclick="showTab('chemistry', this)">⚗️ Chemistry</button>
+  <button class="tab" onclick="showTab('maths', this)">∑ Mathematics</button>
+</div>
+
+<main><div id="physics" class="section visible"><div class="std-block"><div class="std-header"><span class="std-tag tag-11">Class 11</span><span class="std-title">Physics — All Chapters with Prerequisites</span></div><div class="independent-panel"><h3>✦ Start Right Now (No Prior Chapter Needed)</h3><p>These need nothing beyond Class 10 basics.</p><div class="ind-chips"><span class="ind-chip">Mathematical Tools &amp; Vector</span><span class="ind-chip">Units and Measurements</span><span class="ind-chip">Mechanical Properties of Solids</span><span class="ind-chip">Thermal Properties of Matter</span></div></div><div class="sub-group"><div class="chapter-grid"><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">01</span><span class="chapter-name">Mathematical Tools &amp; Vector</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">Class 10 maths + basic trigonometry</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">02</span><span class="chapter-name">Units and Measurements</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">No prerequisite — start anytime.</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">03</span><span class="chapter-name">Motion in a Straight Line</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Units &amp; Measurements (Ch 2)</div><div class="prereq-item">Basic differentiation/graphs helpful</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">04</span><span class="chapter-name">Motion in a Plane</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Mathematical Tools &amp; Vector (Ch 1)</div><div class="prereq-item">Motion in a Straight Line (Ch 3)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">05</span><span class="chapter-name">Laws of Motion</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Motion in a Plane (Ch 4)</div><div class="prereq-item">Vectors (Ch 1)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">06</span><span class="chapter-name">Circular Motion</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Motion in a Plane (Ch 4)</div><div class="prereq-item">Laws of Motion (Ch 5)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">07</span><span class="chapter-name">Work, Energy and Power</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Laws of Motion (Ch 5)</div><div class="prereq-item">Dot product (Ch 1)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">08</span><span class="chapter-name">Centre of Mass &amp; System of Particles</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Laws of Motion (Ch 5)</div><div class="prereq-item">Work, Energy and Power (Ch 7)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">09</span><span class="chapter-name">Rotational Motion</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Centre of Mass (Ch 8)</div><div class="prereq-item">Circular Motion (Ch 6)</div><div class="prereq-item">Work, Energy and Power (Ch 7)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">10</span><span class="chapter-name">Mechanical Properties of Solids</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">Basic forces from Class 10</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">11</span><span class="chapter-name">Thermal Properties of Matter</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">No prerequisite — start anytime.</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">12</span><span class="chapter-name">Kinetic Theory of Gases</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Thermal Properties (Ch 11)</div><div class="prereq-item">Work, Energy and Power (Ch 7)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">13</span><span class="chapter-name">Mechanical Properties of Fluids</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Laws of Motion (Ch 5)</div><div class="prereq-item">Work, Energy and Power (Ch 7)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">14</span><span class="chapter-name">Oscillations</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Laws of Motion (Ch 5)</div><div class="prereq-item">Circular Motion (Ch 6)</div><div class="prereq-item">Work, Energy and Power (Ch 7)</div><div class="prereq-item">Trigonometry</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">15</span><span class="chapter-name">Waves</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Oscillations (Ch 14)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">18</span><span class="chapter-name">Gravitation</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Circular Motion (Ch 6)</div><div class="prereq-item">Work, Energy and Power (Ch 7)</div><div class="prereq-item">Rotational Motion (Ch 9)</div></div></div></div></div></div></div><div class="std-block"><div class="std-header"><span class="std-tag tag-12">Class 12</span><span class="std-title">Physics — All Chapters with Prerequisites</span></div><div class="independent-panel"><h3>✦ Start Right Now (No Prior Chapter Needed)</h3><p>These need nothing beyond Class 10 basics.</p><div class="ind-chips"><span class="ind-chip">Ray Optics and Optical Instruments</span></div></div><div class="sub-group"><div class="chapter-grid"><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">16</span><span class="chapter-name">Electric Charges and Fields</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Vectors (Ch 1)</div><div class="prereq-item">Laws of Motion (Ch 5)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">17</span><span class="chapter-name">Electrostatic Potential and Capacitance</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Electric Charges and Fields (Ch 16)</div><div class="prereq-item">Work, Energy and Power (Ch 7)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">19</span><span class="chapter-name">Current Electricity</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Electrostatic Potential (Ch 17)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">20</span><span class="chapter-name">Moving Charges and Magnetism</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Current Electricity (Ch 19)</div><div class="prereq-item">Circular Motion (Ch 6)</div><div class="prereq-item">Vector cross product (Ch 1)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">21</span><span class="chapter-name">Magnetism and Matter</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Moving Charges and Magnetism (Ch 20)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">22</span><span class="chapter-name">Electromagnetic Induction</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Moving Charges and Magnetism (Ch 20)</div><div class="prereq-item">Current Electricity (Ch 19)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">23</span><span class="chapter-name">Alternating Current</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Electromagnetic Induction (Ch 22)</div><div class="prereq-item">Oscillations (Ch 14) — SHM analogy</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">24</span><span class="chapter-name">Electromagnetic Waves</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Waves (Ch 15)</div><div class="prereq-item">Electromagnetic Induction (Ch 22)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">25</span><span class="chapter-name">Ray Optics and Optical Instruments</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">Class 10 optics + basic geometry</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">26</span><span class="chapter-name">Wave Optics</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Waves (Ch 15)</div><div class="prereq-item">Ray Optics (Ch 25)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">27</span><span class="chapter-name">Dual Nature of Radiation and Matter</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Electromagnetic Waves (Ch 24)</div><div class="prereq-item">Electric Charges (Ch 16)</div><div class="prereq-item">Work, Energy and Power (Ch 7)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">28</span><span class="chapter-name">Atoms</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Circular Motion (Ch 6)</div><div class="prereq-item">Electric Charges (Ch 16)</div><div class="prereq-item">Dual Nature (Ch 27)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">29</span><span class="chapter-name">Nuclei</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Atoms (Ch 28)</div></div></div></div><div class="chapter-card card-phy"><div class="chapter-top"><span class="chapter-num">30</span><span class="chapter-name">Semiconductor Electronics</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Current Electricity (Ch 19)</div></div></div></div></div></div></div></div><div id="chemistry" class="section"><div class="std-block"><div class="std-header"><span class="std-tag tag-11">Class 11</span><span class="std-title">Chemistry — All Chapters with Prerequisites</span></div><div class="independent-panel"><h3>✦ Start Right Now (No Prior Chapter Needed)</h3><p>These need nothing beyond Class 10 basics.</p><div class="ind-chips"><span class="ind-chip">Some Basic Concepts of Chemistry</span><span class="ind-chip">Structure of Atom</span><span class="ind-chip">Some Basic Principles &amp; Techniques — Part 1</span><span class="ind-chip">Purification Methods</span></div></div><div class="sub-group"><div class="sub-label">Physical Chemistry</div><div class="chapter-grid"><div class="chapter-card card-chem-physical"><div class="chapter-top"><span class="chapter-num">01</span><span class="chapter-name">Some Basic Concepts of Chemistry</span><span class="badge badge-teal">Physical</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">Starting point of Physical Chemistry</div></div></div></div><div class="chapter-card card-chem-physical"><div class="chapter-top"><span class="chapter-num">05</span><span class="chapter-name">Structure of Atom</span><span class="badge badge-teal">Physical</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">No prerequisite — start anytime.</div></div></div></div><div class="chapter-card card-chem-physical"><div class="chapter-top"><span class="chapter-num">06</span><span class="chapter-name">Thermodynamics &amp; Thermochemistry</span><span class="badge badge-teal">Physical</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Mole concept (Ch 1)</div><div class="prereq-item">Basic calculus</div></div></div></div><div class="chapter-card card-chem-physical"><div class="chapter-top"><span class="chapter-num">07</span><span class="chapter-name">Redox Reaction</span><span class="badge badge-teal">Physical</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Mole concept (Ch 1)</div></div></div></div><div class="chapter-card card-chem-physical"><div class="chapter-top"><span class="chapter-num">02</span><span class="chapter-name">Equilibrium</span><span class="badge badge-teal">Physical</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Mole concept (Ch 1)</div><div class="prereq-item">Thermodynamics (Ch 6)</div></div></div></div></div></div><div class="sub-group"><div class="sub-label">Organic Chemistry</div><div class="chapter-grid"><div class="chapter-card card-chem-organic"><div class="chapter-top"><span class="chapter-num">01</span><span class="chapter-name">Some Basic Principles &amp; Techniques — Part 1</span><span class="badge badge-purple">Organic</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">Starting point of Organic Chemistry</div></div></div></div><div class="chapter-card card-chem-organic"><div class="chapter-top"><span class="chapter-num">02</span><span class="chapter-name">Some Basic Principles &amp; Techniques — Part 2</span><span class="badge badge-purple">Organic</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Part 1 (Ch 1)</div></div></div></div><div class="chapter-card card-chem-organic"><div class="chapter-top"><span class="chapter-num">03</span><span class="chapter-name">Some Basic Principles &amp; Techniques — Part 3</span><span class="badge badge-purple">Organic</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Parts 1–2 (Ch 1–2)</div></div></div></div><div class="chapter-card card-chem-organic"><div class="chapter-top"><span class="chapter-num">04</span><span class="chapter-name">Hydrocarbon</span><span class="badge badge-purple">Organic</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Organic Ch 1–3</div><div class="prereq-item">Chemical Bonding (Inorganic Ch 2)</div></div></div></div><div class="chapter-card card-chem-organic"><div class="chapter-top"><span class="chapter-num">10</span><span class="chapter-name">Purification Methods</span><span class="badge badge-purple">Organic</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">Organic Ch 1 basics</div></div></div></div></div></div><div class="sub-group"><div class="sub-label">Inorganic Chemistry</div><div class="chapter-grid"><div class="chapter-card card-chem-inorganic"><div class="chapter-top"><span class="chapter-num">01</span><span class="chapter-name">Classification of Elements and Periodicity</span><span class="badge badge-cyan">Inorganic</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Structure of Atom (Physical Ch 5)</div></div></div></div><div class="chapter-card card-chem-inorganic"><div class="chapter-top"><span class="chapter-num">02</span><span class="chapter-name">Chemical Bonding and Molecular Structure</span><span class="badge badge-cyan">Inorganic</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Structure of Atom (Physical Ch 5)</div><div class="prereq-item">Periodicity (Ch 1)</div></div></div></div></div></div></div><div class="std-block"><div class="std-header"><span class="std-tag tag-12">Class 12</span><span class="std-title">Chemistry — All Chapters with Prerequisites</span></div><div class="independent-panel"><h3>✦ Start Right Now (No Prior Chapter Needed)</h3><p>These need nothing beyond Class 10 basics.</p><div class="ind-chips"></div></div><div class="sub-group"><div class="sub-label">Physical Chemistry</div><div class="chapter-grid"><div class="chapter-card card-chem-physical"><div class="chapter-top"><span class="chapter-num">03</span><span class="chapter-name">Electrochemistry</span><span class="badge badge-teal">Physical</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Redox Reaction (Ch 7)</div><div class="prereq-item">Equilibrium (Ch 2)</div><div class="prereq-item">Thermodynamics (Ch 6)</div></div></div></div><div class="chapter-card card-chem-physical"><div class="chapter-top"><span class="chapter-num">04</span><span class="chapter-name">Chemical Kinetics</span><span class="badge badge-teal">Physical</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Mole concept (Ch 1)</div><div class="prereq-item">Logs &amp; basic calculus</div></div></div></div><div class="chapter-card card-chem-physical"><div class="chapter-top"><span class="chapter-num">08</span><span class="chapter-name">Solutions</span><span class="badge badge-teal">Physical</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Mole concept (Ch 1)</div><div class="prereq-item">Thermodynamics (Ch 6)</div></div></div></div></div></div><div class="sub-group"><div class="sub-label">Organic Chemistry</div><div class="chapter-grid"><div class="chapter-card card-chem-organic"><div class="chapter-top"><span class="chapter-num">05</span><span class="chapter-name">Haloalkanes and Haloarenes</span><span class="badge badge-purple">Organic</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Organic Ch 1–4 (reaction mechanisms)</div></div></div></div><div class="chapter-card card-chem-organic"><div class="chapter-top"><span class="chapter-num">06</span><span class="chapter-name">Alcohols, Phenols and Ethers</span><span class="badge badge-purple">Organic</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Organic Ch 1–5</div></div></div></div><div class="chapter-card card-chem-organic"><div class="chapter-top"><span class="chapter-num">07</span><span class="chapter-name">Aldehydes, Ketones and Carboxylic Acids</span><span class="badge badge-purple">Organic</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Organic Ch 1–6</div></div></div></div><div class="chapter-card card-chem-organic"><div class="chapter-top"><span class="chapter-num">08</span><span class="chapter-name">Amines</span><span class="badge badge-purple">Organic</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Organic Ch 1–7</div></div></div></div><div class="chapter-card card-chem-organic"><div class="chapter-top"><span class="chapter-num">09</span><span class="chapter-name">Biomolecules</span><span class="badge badge-purple">Organic</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Aldehydes &amp; Ketones (Ch 7)</div><div class="prereq-item">Stereochemistry (Ch 3)</div></div></div></div></div></div><div class="sub-group"><div class="sub-label">Inorganic Chemistry</div><div class="chapter-grid"><div class="chapter-card card-chem-inorganic"><div class="chapter-top"><span class="chapter-num">03</span><span class="chapter-name">Coordination Compounds</span><span class="badge badge-cyan">Inorganic</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Chemical Bonding (Ch 2)</div><div class="prereq-item">d and f-Block (Ch 5)</div><div class="prereq-item">Structure of Atom</div></div></div></div><div class="chapter-card card-chem-inorganic"><div class="chapter-top"><span class="chapter-num">04</span><span class="chapter-name">P-block Elements</span><span class="badge badge-cyan">Inorganic</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Periodicity (Ch 1)</div><div class="prereq-item">Chemical Bonding (Ch 2)</div></div></div></div><div class="chapter-card card-chem-inorganic"><div class="chapter-top"><span class="chapter-num">05</span><span class="chapter-name">The d and f-Block Elements</span><span class="badge badge-cyan">Inorganic</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Periodicity (Ch 1)</div><div class="prereq-item">Chemical Bonding (Ch 2)</div></div></div></div><div class="chapter-card card-chem-inorganic"><div class="chapter-top"><span class="chapter-num">06</span><span class="chapter-name">Principles of Qualitative Analysis</span><span class="badge badge-cyan">Inorganic</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Inorganic Ch 3, 4, 5</div><div class="prereq-item">Equilibrium (Physical Ch 2) — solubility product</div></div></div></div></div></div></div></div><div id="maths" class="section"><div class="std-block"><div class="std-header"><span class="std-tag tag-11">Class 11</span><span class="std-title">Mathematics — All Chapters with Prerequisites</span></div><div class="independent-panel"><h3>✦ Start Right Now (No Prior Chapter Needed)</h3><p>These need nothing beyond Class 10 basics.</p><div class="ind-chips"><span class="ind-chip">Basic Math</span><span class="ind-chip">Statistics</span><span class="ind-chip">Trigonometric Functions</span><span class="ind-chip">Sets Relations</span></div></div><div class="sub-group"><div class="chapter-grid"><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">01</span><span class="chapter-name">Basic Math</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">No prerequisite — start anytime.</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">02</span><span class="chapter-name">Quadratic Equations</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Basic Math (Ch 1)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">03</span><span class="chapter-name">Sequence and Series</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Basic Math (Ch 1)</div><div class="prereq-item">Quadratic Equations (Ch 2)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">04</span><span class="chapter-name">Permutations and Combinations</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Basic Math (Ch 1)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">05</span><span class="chapter-name">Binomial Theorem</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Permutations and Combinations (Ch 4)</div><div class="prereq-item">Sequence and Series (Ch 3)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">06</span><span class="chapter-name">Straight Lines</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Basic Math (Ch 1)</div><div class="prereq-item">Basic trigonometry</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">07</span><span class="chapter-name">Circles</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Straight Lines (Ch 6)</div><div class="prereq-item">Quadratic Equations (Ch 2)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">08</span><span class="chapter-name">Conic Sections: Parabola &amp; Ellipse</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Straight Lines (Ch 6)</div><div class="prereq-item">Circles (Ch 7)</div><div class="prereq-item">Quadratic Equations (Ch 2)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">09</span><span class="chapter-name">Conic Sections: Hyperbola</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Parabola &amp; Ellipse (Ch 8)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">10</span><span class="chapter-name">Complex Number</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Quadratic Equations (Ch 2)</div><div class="prereq-item">Trigonometric Functions (Ch 12)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">11</span><span class="chapter-name">Statistics</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">No prerequisite — start anytime.</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">12</span><span class="chapter-name">Trigonometric Functions</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">Class 10 trigonometry</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">13</span><span class="chapter-name">Trigonometric Equation</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Trigonometric Functions (Ch 12)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">14</span><span class="chapter-name">Solutions of Triangle</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Trigonometric Functions (Ch 12)</div><div class="prereq-item">Trigonometric Equation (Ch 13)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">18</span><span class="chapter-name">Sets Relations</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">No prerequisite — start anytime.</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">19</span><span class="chapter-name">Functions</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Sets Relations (Ch 18)</div><div class="prereq-item">Quadratic Equations (Ch 2)</div></div></div></div></div></div></div><div class="std-block"><div class="std-header"><span class="std-tag tag-12">Class 12</span><span class="std-title">Mathematics — All Chapters with Prerequisites</span></div><div class="independent-panel"><h3>✦ Start Right Now (No Prior Chapter Needed)</h3><p>These need nothing beyond Class 10 basics.</p><div class="ind-chips"><span class="ind-chip">Determinants Matrices</span></div></div><div class="sub-group"><div class="chapter-grid"><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">15</span><span class="chapter-name">Determinants Matrices</span><span class="badge badge-green">✦ Independent</span></div><div class="prereq-block"><div class="prereq-label">Notes</div><div class="prereq-list"><div class="prereq-item">No prerequisite — start anytime.</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">16</span><span class="chapter-name">Vector Algebra</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Trigonometric Functions (Ch 12)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">17</span><span class="chapter-name">Three Dimensional Geometry</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Vector Algebra (Ch 16)</div><div class="prereq-item">Straight Lines (Ch 6)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">20</span><span class="chapter-name">Inverse Trigonometric Functions</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Trigonometric Functions (Ch 12)</div><div class="prereq-item">Functions (Ch 19)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">21</span><span class="chapter-name">Limit, Continuity and Differentiability</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Functions (Ch 19)</div><div class="prereq-item">Trigonometric Functions (Ch 12)</div><div class="prereq-item">Inverse Trig (Ch 20)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">22</span><span class="chapter-name">Method of Differentiation</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Limit, Continuity and Differentiability (Ch 21)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">23</span><span class="chapter-name">Application of Derivatives</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Method of Differentiation (Ch 22)</div><div class="prereq-item">Functions (Ch 19)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">25</span><span class="chapter-name">Indefinite Integration</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Method of Differentiation (Ch 22)</div><div class="prereq-item">Trigonometric Functions (Ch 12)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">24</span><span class="chapter-name">Definite Integration</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Indefinite Integration (Ch 25)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">26</span><span class="chapter-name">Application of Integrals</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Definite Integration (Ch 24)</div><div class="prereq-item">Conic Sections (Ch 7–9)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">27</span><span class="chapter-name">Differential Equation</span><span class="badge badge-red">● Heavy Dep.</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Indefinite Integration (Ch 25)</div><div class="prereq-item">Method of Differentiation (Ch 22)</div></div></div></div><div class="chapter-card card-math"><div class="chapter-top"><span class="chapter-num">28</span><span class="chapter-name">Probability</span><span class="badge badge-yellow">⚑ Partial</span></div><div class="prereq-block"><div class="prereq-label">Prerequisites</div><div class="prereq-list"><div class="prereq-item">Permutations and Combinations (Ch 4)</div><div class="prereq-item">Sets Relations (Ch 18)</div></div></div></div></div></div></div></div></main><script>
+  const activeClasses = ['active-phy', 'active-chem', 'active-math'];
+  const classMap = { physics: 'active-phy', chemistry: 'active-chem', maths: 'active-math' };
+
+  function showTab(subject, btn) {
+    // Hide all sections
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+    // Show selected
+    const target = document.getElementById(subject);
+    if (target) target.classList.add('visible');
+
+    // Reset all tab active states
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.remove(...activeClasses);
+    });
+
+    // Set active on clicked tab
+    if (btn) btn.classList.add(classMap[subject]);
+
+    // Scroll to top of main content smoothly on mobile
+    const mainEl = document.querySelector('main');
+    if (mainEl) mainEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // On load: make sure physics is visible and tab is active
+  document.addEventListener('DOMContentLoaded', () => {
+    const firstTab = document.querySelector('.tab');
+    if (firstTab) firstTab.classList.add('active-phy');
+    const physicsSection = document.getElementById('physics');
+    if (physicsSection) physicsSection.classList.add('visible');
+  });
+
+  // ── PROGRESS TRACKING (checkboxes + streak bars) ──
+  (function () {
+    const SUBJECTS = ['physics', 'chemistry', 'maths'];
+    const STORAGE_KEY = 'jeeAllenChapterProgress';
+    let state = {};
+    try {
+      state = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+    } catch (e) {
+      state = {};
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function updateProgress() {
+      let grandTotal = 0, grandDone = 0;
+      SUBJECTS.forEach(subj => {
+        const section = document.getElementById(subj);
+        if (!section) return;
+        const cards = section.querySelectorAll('.chapter-card');
+        let done = 0;
+        cards.forEach((card, i) => {
+          if (state[subj + '-' + i]) done++;
+        });
+        grandTotal += cards.length;
+        grandDone += done;
+
+        const bar = document.getElementById('bar-' + subj);
+        const label = document.getElementById('label-' + subj);
+        if (bar) bar.style.width = (cards.length ? (done / cards.length * 100) : 0) + '%';
+        if (label) label.textContent = done + ' / ' + cards.length;
+      });
+      const totalBar = document.getElementById('bar-total');
+      const totalLabel = document.getElementById('label-total');
+      if (totalBar) totalBar.style.width = (grandTotal ? (grandDone / grandTotal * 100) : 0) + '%';
+      if (totalLabel) totalLabel.textContent = grandDone + ' / ' + grandTotal;
+    }
+
+    function injectCheckboxes() {
+      SUBJECTS.forEach(subj => {
+        const section = document.getElementById(subj);
+        if (!section) return;
+        const cards = section.querySelectorAll('.chapter-card');
+        cards.forEach((card, i) => {
+          const key = subj + '-' + i;
+          const top = card.querySelector('.chapter-top');
+          if (!top || top.querySelector('.chp-check')) return;
+
+          const cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.className = 'chp-check';
+          cb.checked = !!state[key];
+          if (cb.checked) card.classList.add('chp-done');
+
+          cb.addEventListener('click', (e) => e.stopPropagation());
+          cb.addEventListener('change', () => {
+            state[key] = cb.checked;
+            saveState();
+            card.classList.toggle('chp-done', cb.checked);
+            updateProgress();
+          });
+
+          top.insertBefore(cb, top.firstChild);
+        });
+      });
+      updateProgress();
+    }
+
+    document.addEventListener('DOMContentLoaded', injectCheckboxes);
+  })();
+
+  // Keyboard accessibility: tab switching with arrow keys
+  document.querySelector('.tabs-wrap').addEventListener('keydown', (e) => {
+    const tabs = [...document.querySelectorAll('.tab')];
+    const current = document.activeElement;
+    const idx = tabs.indexOf(current);
+    if (idx === -1) return;
+    if (e.key === 'ArrowRight' && idx < tabs.length - 1) {
+      tabs[idx + 1].focus();
+      tabs[idx + 1].click();
+    }
+    if (e.key === 'ArrowLeft' && idx > 0) {
+      tabs[idx - 1].focus();
+      tabs[idx - 1].click();
+    }
+  });
+</script></body></html>
